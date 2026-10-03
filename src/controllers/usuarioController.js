@@ -1,6 +1,6 @@
 const pool = require('../config/db');
 const { registrarUsuario } = require('../helpers/gestorLog');
-
+const jwt = require('jsonwebtoken');
 const crearUsuario = async (req, res) => {
 
   const { nombre, correo, contrasena } = req.body;
@@ -200,11 +200,68 @@ const mostrarUsuariosPorId = async (req, res) => {
   }
 };
 
+const login = async (req, res) => {
+  const { correo, contrasena } = req.body;
+
+  if (!correo || !contrasena) {
+    return res.status(400).json({
+      error: 'Correo y contraseña son requeridos.'
+    });
+  }
+
+  try {
+    const query = `SELECT id, nombre, correo, contrasena FROM usuarios WHERE correo = $1;`;
+    const resultado = await pool.query(query, [correo]);
+
+    if (resultado.rowCount === 0) {
+      return res.status(401).json({
+        status: 'error',
+        message: 'Correo o contraseña incorrectos.'
+      });
+    }
+
+    const usuario = resultado.rows[0];
+
+    if (contrasena !== usuario.contrasena) {
+      return res.status(401).json({
+        status: 'error',
+        message: 'Correo o contraseña incorrectos.'
+      });
+    }
+
+    const token = jwt.sign(
+      {
+        id: usuario.id,
+        nombre: usuario.nombre,
+        correo: usuario.correo
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: '1h'
+      }
+    );
+
+    return res.status(200).json({
+      mensaje: 'Login exitoso.',
+      token
+    });
+
+  } catch (error) {
+    console.error('Error en login:', error.message);
+
+    return res.status(500).json({
+      status: 'error',
+      message: 'Error interno al iniciar sesión.'
+    });
+  }
+};
+
 module.exports = {
   mostrarUsuarios,
   actualizarCorreo,
   eliminarUsuario,
   crearUsuario,
   mostrarUsuariosPorId,
-  actualizarUsuario
+  actualizarUsuario,
+  login
 }
