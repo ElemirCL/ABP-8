@@ -24,13 +24,13 @@ Para ejecutar el proyecto se necesita:
 Si utilizas Git, puedes clonar el repositorio con:
 
 ```bash
-git clone https://github.com/ElemirCL/ABP8.git
+git clone https://github.com/ElemirCL/ABP-8.git
 ```
 
 ### 2. Acceder a la carpeta del proyecto
 
 ```bash
-cd ABP6
+cd ABP-8
 ```
 
 ### 3. Instalar las dependencias
@@ -75,6 +75,7 @@ Una vez iniciado, el servidor estará disponible en:
 
 ### Otros
 | Método | Endpoint | Descripción |
+|----------|----------|----------|
 | GET | / | Página principal |
 | GET | /status | estado del servidor |
 | GET | /saludo | Ruta pública |
@@ -83,10 +84,11 @@ Una vez iniciado, el servidor estará disponible en:
 
 ##  Sistema de logs
 
-Cada vez que un usuario accede a una ruta, la aplicación registra la visita en el siguiente archivo:
+Cada vez que un usuario accede a una ruta, la aplicación registra la visita en el siguiente archivo como tambíen los CRUD de usuarios quedarán registrados
 
 ```text
 logs/log.txt
+logs/usuarios.txt
 ```
 
 Cada registro contiene:
@@ -100,6 +102,11 @@ Cada registro contiene:
 ```text
 27-08-2026, 16:55:10 - Ruta accedida: /
 27-08-2026, 16:55:18 - Ruta accedida: /status
+
+Usuario actualizado: [ID 3] 11-09-2026, 6:28:47 p. m.
+Usuario creado: [ID 4] 14-09-2026, 8:36:07 p. m.
+Usuario eliminado: [ID 4] 14-09-2026, 9:16:39 p. m.
+```
 
 ---
 
