@@ -24,7 +24,7 @@ Para ejecutar el proyecto se necesita:
 Si utilizas Git, puedes clonar el repositorio con:
 
 ```bash
-git clone https://github.com/ElemirCL/ABP6.git
+git clone https://github.com/ElemirCL/ABP8.git
 ```
 
 ### 2. Acceder a la carpeta del proyecto
@@ -52,25 +52,34 @@ npm start
 
 Una vez iniciado, el servidor estará disponible en:
 
-**http://localhost:3000**
+**http://localhost:8080**
 
 ---
 
-##  Rutas disponibles
+##  Rutas disponibles - Endpoints
+### Usuarios
+| Método | Endpoint | Descripción | Autenticación |
+|----------|----------|----------|----------|
+| POST | /usuarios   | Crear usuario | No |
+| GET | /usuarios   | Listar usuarios   |Sí |
+| GET | /usuarios/:id | Obtener usuario | No |
+| PUT | /usuarios/:id | Actualizar usuario completo | No |
+| PATCH | /usuarios/:id | Actualizar correo | No |
+| DELETE | /usuario/:id | Eliminar usuario | Sí |
 
-### Página principal
+### Pedidos
+| Método | Endpoint | Descripción | Autenticación |
+|----------|----------|----------|----------|
+| GET | /usuarios/:id/pedidos | Obtener pedidos de un usuario | No |
+| POST | /pedidos | Crear pedido | No |
 
-**GET /**
+### Otros
+| Método | Endpoint | Descripción |
+| GET | / | Página principal |
+| GET | /status | estado del servidor |
+| GET | /saludo | Ruta pública |
+| POST | /upload | Subir archivo |
 
-Muestra la página principal de la aplicación.
-
-### Estado del servidor
-
-**GET /status**
-
-Muestra información sobre el estado actual del servidor.
-
----
 
 ##  Sistema de logs
 
@@ -102,16 +111,34 @@ Cada registro contiene:
 ├── router.js
 ├── README.md
 ├── package.json
-│
-├── controllers/
-├── helpers/
-│   └── gestorLog.js
-├── logs/
-│   └── log.txt
-├── middlewares/
-├── routes/
+├── .env
+├── src/
+|   ├── controllers/
+|       └── uploadController.js
+|       └── usuarioController.js
+|   ├── helpers/
+│       └── gestorLog.js
+|   ├── logs/
+│       └── log.txt
+|       └── usuarios.txt
+|   ├── middlewares/
+|       └── authMiddleware.js
+|       └── validarCorreo.js
+|       └── validarId.js
+|       └── validarUsuario.js
+|   ├── routes/
+|       └──router.js
 ├── public/
+|   └── public.html
+|   └── style.css
 └── views/
+|   ├── partials/
+|       └── footer.hbs
+|       └── header.hbs
+|   └── index.hbs
+|   └── status.hbs
+|   └── upload.hbs
+└── uploads/
 ```
 
 ---
@@ -123,11 +150,16 @@ Cada registro contiene:
 | `server.js` | Inicia el servidor de la aplicación. |
 | `app.js` | Configura Express y conecta los diferentes componentes de la aplicación. |
 | `router.js` | Contiene las rutas de la aplicación. |
-| `helpers/gestorLog.js` | Gestiona el registro de las visitas. |
-| `logs/log.txt` | Almacena los registros de acceso. |
+| `helpers/` | Gestiona el registro de las visitas. |
+| `logs/` | Almacena los registros de acceso y crud de usuarios. |
 | `views/` | Contiene las vistas desarrolladas con Handlebars. |
 | `public/` | Contiene los archivos estáticos de la aplicación. |
 | `controllers/` | Carpeta destinada a la lógica de los controladores. |
+| `config/` | Carpeta de configuración de base de datos |
+| `middlewares/` | Middleware de validación de datos |
+| `models/` | Configuración de Sequelize |
+| `routes/` | Configuración de endpoints |
+| `uploads/` | Contiene los archivos subidos|
 
 ---
 
@@ -138,9 +170,16 @@ Cada registro contiene:
 - **Handlebars**
 - **npm**
 - **File System (`fs`)**
+- **chalk**
+- **dotenv**
+- **express-fileupload**
+- **jsonwebtoken**
+- **sequelize**
 
 ---
 
 ##  Notas
 
 El sistema de logs utiliza el módulo `fs` de Node.js para almacenar las visitas en un archivo de texto. La utilización de `fs.appendFile()` permite añadir nuevos registros manteniendo la información almacenada anteriormente.
+
+Se agrega `jswonwebtoken` para el login de un usuario y protección de distintos endpoints criticos limitando el acceso a estos.
